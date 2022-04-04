@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Templates format="2" protocolVersion="62">
+	<Template id="f06365b5-1734-4db8-a610-febdda40da28" revision="1.0">
+		<SuggestedCCUParameters />
+		<RevisionHistory>
+			<Revision id="1.0">Initial version</Revision>
+		</RevisionHistory>
+		<Name>Yeelight</Name>
+		<CcuModel>PacketParserCCU</CcuModel>
+		<Producer></Producer>
+		<Model></Model>
+		<Description></Description>
+		<Category>0</Category>
+		<ImportParameters>
+			<Parameter>
+				<Name>${ipAddress}</Name>
+				<Value>192.168.0.1</Value>
+				<Id>ipAddress</Id>
+			</Parameter>
+			<Parameter>
+				<Name>Port</Name>
+				<Value>55443</Value>
+				<Id>port</Id>
+			</Parameter>
+			<Parameter>
+				<Name>Internal poll interval</Name>
+				<Value>5000</Value>
+				<Id>internalPollInterval</Id>
+			</Parameter>
+		</ImportParameters>
+		<Module>
+			<Name>Yeelight module</Name>
+			<Model>PacketParserModule</Model>
+			<DeviceProperties>
+				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+				<IpAddress>$[ipAddress]</IpAddress>
+				<Port>$[port]</Port>
+				<ConnectionType>tcp</ConnectionType>
+				<StayConnected>False</StayConnected>
+			</DeviceProperties>
+			<Devices>
+				<Device>
+					<Name>Yeelight dimmer</Name>
+					<Model>PacketParserDimmer</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<ReadLevelRequest>{"Content":{"Script":"\"{\\\"id\\\":1, \\\"method\\\":\\\"get_prop\\\", \\\"params\\\":[\\\"bright\\\", \\\"power\\\"]}\" + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":"VAR brightness := PARSETEXT(VALUERESPONSE, \"result\\\":[\\\"\",\"\") / 100.0;\r\nVAR onOff := PARSETEXT(VALUERESPONSE, \"result\\\":[...,\\\"\", \"\");\r\nIF(onOff = \"off\", 0, brightness)"}</ReadLevelRequest>
+						<WriteLevelRequest>{"Content":{"Script":"VAR onoff := IF(Le&gt;0, \"on\", \"off\");\r\nVAR eol := BYTETEXT(\"0d0a\");\r\n\"{\\\"id\\\":1,\\\"method\\\":\\\"set_power\\\",\\\"params\\\":[\\\"\" + onoff + \"\\\", \\\"smooth\\\", 300]}\" + eol +\r\n\"{\\\"id\\\":1,\\\"method\\\":\\\"set_bright\\\",\\\"params\\\":[\" + ROUND(Le*100) + \", \\\"smooth\\\", 500]}\" + eol;","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteLevelRequest>
+					</DeviceProperties>
+				</Device>
+			</Devices>
+		</Module>
+	</Template>
+</Templates>

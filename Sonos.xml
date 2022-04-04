@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Templates format="2" protocolVersion="62">
+	<Template id="fdbf001d-e1dc-4112-b4dc-2e3a287d4b62" revision="1.0">
+		<Name>Sonos</Name>
+		<CcuModel>PacketParserCCU</CcuModel>
+		<Description></Description>
+		<RevisionHistory>
+			<Revision id="1.0">Initial version</Revision>
+		</RevisionHistory>
+		<ImportParameters>
+			<Parameter>
+				<Name>${ipAddress}</Name>
+				<Value>192.168.0.1</Value>
+				<Id>IpAddress</Id>
+			</Parameter>
+		</ImportParameters>
+		<Module>
+			<Name>Sonos</Name>
+			<Model>PacketParserModule</Model>
+			<DeviceProperties>
+				<IpAddress>$[IpAddress]</IpAddress>
+				<Port>1400</Port>
+				<ConnectionType>http</ConnectionType>
+				<InternalPollInterval>15000</InternalPollInterval>
+				<ReadRequest></ReadRequest>
+			</DeviceProperties>
+			<Devices>
+				<Device>
+					<Name>Sonos Volume</Name>
+					<Model>PacketParserDimmer</Model>
+					<DeviceProperties>
+						<InternalPollInterval>2500</InternalPollInterval>
+						<ReadLevelRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetVolume xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#GetVolume\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":"PARSETEXT(VALUERESPONSE,\"&lt;CurrentVolume&gt;\") / 100"}</ReadLevelRequest>
+						<WriteLevelRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetVolume xmlns:u=\\\"urn:schemas-upnp-org:service:RenderingControl:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredVolume&gt;\" + ROUND(Le*100) + \"&lt;/DesiredVolume&gt;&lt;/u:SetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetVolume\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteLevelRequest>
+						<IconId>0</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Next</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Next xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Next&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Next\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>212</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Pause</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Pause xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Pause&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Pause\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>214</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Play</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Play xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Play&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Play\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>86</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Previous</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"/MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Previous xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Previous&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Previous\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>211</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Stop</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Stop xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Stop&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Stop\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>215</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Volume Up</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetRelativeVolume xmlns:u=\\\"urn:schemas-upnp-org:service:RenderingControl:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;Adjustment&gt;5&lt;/Adjustment&gt;&lt;/u:SetRelativeVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetRelativeVolume\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>207</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Volume Down</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetRelativeVolume xmlns:u=\\\"urn:schemas-upnp-org:service:RenderingControl:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;Adjustment&gt;-5&lt;/Adjustment&gt;&lt;/u:SetRelativeVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetRelativeVolume\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>208</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Mute</Name>
+					<Model>PacketParserSwitch</Model>
+					<DeviceProperties>
+						<InternalPollInterval>2500</InternalPollInterval>
+						<OnStateIconId>60</OnStateIconId>
+						<OffStateIconId>61</OffStateIconId>
+						<OnStateName>${general_on}</OnStateName>
+						<OffStateName>${general_off}</OffStateName>
+						<ReadSwitchStateRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetMute xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#GetMute\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":"PARSETEXT(VALUERESPONSE, \"&lt;CurrentMute&gt;\")"}</ReadSwitchStateRequest>
+						<WriteSwitchStateRequest>{"Path":{"Script":"MediaRenderer/RenderingControl/Control","IsPlainText":true},"Content":{"Script":"\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetMute xmlns:u=\\\"urn:schemas-upnp-org:service:RenderingControl:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredMute&gt;\" + St + \"&lt;/DesiredMute&gt;&lt;/u:SetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetMute\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Play Mode</Name>
+					<Model>PacketParserMultiValueSwitch</Model>
+					<DeviceProperties>
+						<InternalPollInterval>2500</InternalPollInterval>
+						<Value0Index>0</Value0Index>
+						<Value1Index>1</Value1Index>
+						<Value2Index>2</Value2Index>
+						<Value3Index>3</Value3Index>
+						<Value4Index>4</Value4Index>
+						<Value5Index>5</Value5Index>
+						<Value6Index>70</Value6Index>
+						<Value7Index>71</Value7Index>
+						<Value8Index>72</Value8Index>
+						<Value9Index>73</Value9Index>
+						<Value0Name>Normal</Value0Name>
+						<Value1Name>Repeat all</Value1Name>
+						<Value2Name>Repeat one</Value2Name>
+						<Value3Name>Shuffle no repeat</Value3Name>
+						<Value4Name>Shuffle</Value4Name>
+						<Value5Name>Shuffle repeat one</Value5Name>
+						<Value6Name>6</Value6Name>
+						<Value7Name>7</Value7Name>
+						<Value8Name>8</Value8Name>
+						<Value9Name>9</Value9Name>
+						<Value0IconId>210</Value0IconId>
+						<Value1IconId>209</Value1IconId>
+						<Value2IconId>209</Value2IconId>
+						<Value3IconId>216</Value3IconId>
+						<Value4IconId>216</Value4IconId>
+						<Value5IconId>216</Value5IconId>
+						<Value6IconId>11</Value6IconId>
+						<Value7IconId>12</Value7IconId>
+						<Value8IconId>13</Value8IconId>
+						<Value9IconId>14</Value9IconId>
+						<ReadSwitchStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetTransportSettings xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:GetTransportSettings&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#GetTransportSettings\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":"VAR mode := PARSETEXT(VALUERESPONSE,\"&lt;PlayMode&gt;\", \"&lt;/PlayMode&gt;\");\r\nSWITCH(mode , \"NORMAL\", 0, \"REPEAT_ALL\", 1, \"REPEAT_ONE\", 2, \"SHUFFLE_NOREPEAT\", 3, \"SHUFFLE\", 4, \"SHUFFLE_REPEAT_ONE\", 5, -1)"}</ReadSwitchStateRequest>
+						<WriteSwitchStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"VAR mode := SWITCH(Mu, 0, \"NORMAL\", 1, \"REPEAT_ALL\", 2, \"REPEAT_ONE\", 3, \"SHUFFLE_NOREPEAT\", 4, \"SHUFFLE\", 5, \"SHUFFLE_REPEAT_ONE\", \"NORMAL\");\r\n\r\n\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetPlayMode xmlns:u=\\\"urn:schemas-upnp-org:service:AVTransport:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;NewPlayMode&gt;\" + mode +\"&lt;/NewPlayMode&gt;&lt;/u:SetPlayMode&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#SetPlayMode\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Sleep in 1 hour</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:ConfigureSleepTimer xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;NewSleepTimerDuration&gt;01:00:00&lt;/NewSleepTimerDuration&gt;&lt;/u:ConfigureSleepTimer&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#ConfigureSleepTimer\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>86</IconId>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Sleep in 15 minutes</Name>
+					<Model>PacketParserPushButton</Model>
+					<DeviceProperties>
+						<InternalPollInterval>10000</InternalPollInterval>
+						<WriteButtonPressedStateRequest>{"Path":{"Script":"MediaRenderer/AVTransport/Control","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:ConfigureSleepTimer xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;NewSleepTimerDuration&gt;00:15:00&lt;/NewSleepTimerDuration&gt;&lt;/u:ConfigureSleepTimer&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#ConfigureSleepTimer\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<IconId>86</IconId>
+					</DeviceProperties>
+				</Device>
+			</Devices>
+		</Module>
+	</Template>
+</Templates>

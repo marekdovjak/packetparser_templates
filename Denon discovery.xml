@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Templates format="2" protocolVersion="62">
+	<Template id="80dce6a8-ce53-49dc-84d3-8e84ec43f455" revision="1.0">
+		<SuggestedCCUParameters />
+		<RevisionHistory>
+			<Revision id="1.0">Initial version</Revision>
+		</RevisionHistory>
+		<Name>Denon discovery</Name>
+		<CcuModel>PacketParserCCU</CcuModel>
+		<Producer></Producer>
+		<Model></Model>
+		<Description></Description>
+		<Category>0</Category>
+		<ImportParameters>
+			<Parameter>
+				<Name>${ipAddress}</Name>
+				<Value>192.168.0.1</Value>
+				<Id>ipAddress</Id>
+			</Parameter>
+		</ImportParameters>
+		<Module>
+			<Name>Denon discovery</Name>
+			<Model>PacketParserModule</Model>
+			<DeviceProperties>
+				<InternalPollInterval>15000</InternalPollInterval>
+				<IpAddress>$[ipAddress]</IpAddress>
+				<Port>1255</Port>
+				<ConnectionType>tcp</ConnectionType>
+				<StayConnected>False</StayConnected>
+			</DeviceProperties>
+			<Devices>
+				<Device>
+					<Name>Denon player id</Name>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>5000</InternalPollInterval>
+						<IsReadOnly>False</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":"\"heos://player/get_players\" + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":"PARSEJSON(VALUERESPONSE,\"$.payload[0].pid\")"}</ReadStateRequest>
+					</DeviceProperties>
+				</Device>
+			</Devices>
+		</Module>
+	</Template>
+</Templates>

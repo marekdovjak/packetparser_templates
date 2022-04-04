@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Templates format="2" protocolVersion="62">
+	<Template id="80f441fb-6571-4424-985b-126d8a3c7300" revision="1.0">
+		<Name>Keba KeContact P20 Power monitoring</Name>
+		<CcuModel>PacketParserCCU</CcuModel>
+		<Description></Description>
+		<RevisionHistory>
+			<Revision id="1.0">Initial version</Revision>
+		</RevisionHistory>
+		<ImportParameters>
+			<Parameter>
+				<Name>${ipAddress}</Name>
+				<Value>192.168.0.1</Value>
+				<Id>IpAddress</Id>
+			</Parameter>
+			<Parameter>
+				<Name>Port</Name>
+				<Value>7090</Value>
+				<Id>port</Id>
+			</Parameter>
+			<Parameter>
+				<Name>Internal poll interval</Name>
+				<Value>10000</Value>
+				<Id>internalPollInterval</Id>
+			</Parameter>
+		</ImportParameters>
+		<Module>
+			<Name>Keba KeContact P20 Power monitoring</Name>
+			<Id>-1</Id>
+			<Model>PacketParserModule</Model>
+			<DeviceProperties>
+				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+				<IpAddress>$[IpAddress]</IpAddress>
+				<Port>$[port]</Port>
+				<ConnectionType>udp</ConnectionType>
+				<ReadRequest>{"Content":{"Script":"report 3","IsPlainText":true},"Mode":2,"ParseScript":null}</ReadRequest>
+			</DeviceProperties>
+			<Devices>
+				<Device>
+					<Name>Keba I1 [A]</Name>
+					<Id>-2</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.I1\") / 1000.0"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba I2 [A]</Name>
+					<Id>-3</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.I2\") / 1000.0"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba I3 [A]</Name>
+					<Id>-4</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.I3\") / 1000.0"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba Present Power</Name>
+					<Id>-5</Id>
+					<Model>PacketParserElectricityMeter</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<ReadTotalConsumptionRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.['E pres']\") / 10000.0"}</ReadTotalConsumptionRequest>
+						<ReadDemandRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.P\") / 1000000.0"}</ReadDemandRequest>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba Total Power</Name>
+					<Id>-6</Id>
+					<Model>PacketParserElectricityMeter</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<ReadTotalConsumptionRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.['E total']\") / 10000.0"}</ReadTotalConsumptionRequest>
+						<ReadDemandRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.P\") / 1000000.0"}</ReadDemandRequest>
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba U1 [V]</Name>
+					<Id>-7</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.U1\")"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba U2 [V]</Name>
+					<Id>-8</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.U2\")"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+				<Device>
+					<Name>Keba U3 [V]</Name>
+					<Id>-9</Id>
+					<Model>PacketParserVariable</Model>
+					<DeviceProperties>
+						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
+						<IsReadOnly>True</IsReadOnly>
+						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.U3\")"}</ReadStateRequest>
+						<WriteStateRequest />
+					</DeviceProperties>
+				</Device>
+			</Devices>
+		</Module>
+	</Template>
+</Templates>
