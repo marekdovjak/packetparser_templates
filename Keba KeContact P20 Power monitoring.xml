@@ -74,7 +74,7 @@ END</ListenerScriptPacketParser>
 					<Model>PacketParserElectricityMeter</Model>
 					<DeviceProperties>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-						<ListenerScriptPacketParser>To := PARSEJSON(report3, "$.['E pres']", 1) / 1000.0
+						<ListenerScriptPacketParser>To := PARSEJSON(report3, "$.['E pres']", 1) / 10000.0
 Ed := PARSEJSON(report3, "$.P", 1) / 1000000.0</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
@@ -83,7 +83,7 @@ Ed := PARSEJSON(report3, "$.P", 1) / 1000000.0</ListenerScriptPacketParser>
 					<Model>PacketParserElectricityMeter</Model>
 					<DeviceProperties>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-						<ListenerScriptPacketParser>To := PARSEJSON(report3, "$.['E total']", 1) / 1000.0
+						<ListenerScriptPacketParser>To := PARSEJSON(report3, "$.['E total']", 1) / 10000.0
 Ed := PARSEJSON(report3, "$.P", 1) / 1000000.0</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
