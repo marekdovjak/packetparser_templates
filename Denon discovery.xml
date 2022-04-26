@@ -4,7 +4,6 @@
 		<SuggestedCCUParameters />
 		<RevisionHistory>
 			<Revision id="1.0">Initial version</Revision>
-			<Revision id="2.0">Second version (only test)</Revision>
 		</RevisionHistory>
 		<Name>Denon discovery</Name>
 		<CcuModel>PacketParserCCU</CcuModel>
