@@ -32,6 +32,7 @@
 				<IpAddress>$[IpAddress]</IpAddress>
 				<Port>$[port]</Port>
 				<StayConnected>True</StayConnected>
+				<CustomVariables>[{"Name":"report2","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
 				<ReadScriptPacketParser>SENDDATA(TOBYTES("report 2"));</ReadScriptPacketParser>
 				<ListenerScriptPacketParser>VAR jsonString := TOSTRING(RECEIVEDBYTES);
 VAR id := PARSEJSON(jsonString, "$.ID", 1);
@@ -122,8 +123,8 @@ SENDDATA(TOBYTES(command));</WriteSwitchStateScriptPacketParser>
 						<Value8IconId>232</Value8IconId>
 						<Value9IconId>233</Value9IconId>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-						<ReadSwitchStateScriptPacketParser>VAR state := PARSEJSON(report2, "$.State");
-SWITCH(State, 0, 1, 1, 2, 2, 3, 3, 5, 4, 8, 5, 9, 1)</ReadSwitchStateScriptPacketParser>
+						<ListenerScriptPacketParser>VAR state := PARSEJSON(report2, "$.State");
+Mu := SWITCH(State, 0, 1, 1, 2, 2, 3, 3, 5, 4, 8, 5, 9, 1)</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
