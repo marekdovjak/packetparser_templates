@@ -26,14 +26,19 @@
 		</ImportParameters>
 		<Module>
 			<Name>Keba KeContact P20 State</Name>
-			<Id>-1</Id>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleUdp</Model>
 			<DeviceProperties>
 				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
 				<IpAddress>$[IpAddress]</IpAddress>
 				<Port>$[port]</Port>
-				<ConnectionType>udp</ConnectionType>
-				<ReadRequest>{"Content":{"Script":"report 2","IsPlainText":true},"Mode":2,"ParseScript":null}</ReadRequest>
+				<StayConnected>True</StayConnected>
+				<ReadScriptPacketParser>SENDDATA(TOBYTES("report 2"));</ReadScriptPacketParser>
+				<ListenerScriptPacketParser>VAR jsonString := TOSTRING(RECEIVEDBYTES);
+VAR id := PARSEJSON(jsonString, "$.ID", 1);
+
+IF(id = 2)
+    report2 := jsonString;
+END</ListenerScriptPacketParser>
 			</DeviceProperties>
 			<Devices>
 				<Device>
@@ -45,8 +50,9 @@
 						<OffStateIconId>227</OffStateIconId>
 						<OnStateName>${general_enabled}</OnStateName>
 						<OffStateName>${general_disabled}</OffStateName>
-						<ReadSwitchStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.['Enable user']\")"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest>{"Content":{"Script":"\"ena \"+St","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+						<ListenerScriptPacketParser>St := PARSEJSON(report2, "$.['Enable user']", 1)</ListenerScriptPacketParser>
+						<WriteSwitchStateScriptPacketParser>VAR command := "ena " + St;
+SENDDATA(TOBYTES(command));</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -58,7 +64,7 @@
 						<OffStateIconId>221</OffStateIconId>
 						<OnStateName>${general_locked}</OnStateName>
 						<OffStateName>${general_unlocked}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.Plug\") &amp; 0x02"}</ReadStateRequest>
+						<ListenerScriptPacketParser>Rc := PARSEJSON(report2, "$.Plug", 1) &amp; 0x02</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -70,7 +76,7 @@
 						<OffStateIconId>223</OffStateIconId>
 						<OnStateName>${general_plugged}</OnStateName>
 						<OffStateName>${general_unplugged}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.Plug\") &amp; 0x04"}</ReadStateRequest>
+						<ListenerScriptPacketParser>Rc := PARSEJSON(report2, "$.Plug", 1) &amp; 0x04</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -82,7 +88,7 @@
 						<OffStateIconId>225</OffStateIconId>
 						<OnStateName>${general_plugged}</OnStateName>
 						<OffStateName>${general_unplugged}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.Plug\") &amp; 0x01"}</ReadStateRequest>
+						<ListenerScriptPacketParser>Rc := PARSEJSON(report2, "$.Plug", 1) &amp; 0x01</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -116,19 +122,19 @@
 						<Value8IconId>232</Value8IconId>
 						<Value9IconId>233</Value9IconId>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-						<ReadSwitchStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"VAR state := PARSEJSON(MODULERESPONSE, \"$.State\");\r\n\r\nSWITCH(State, 0, 1, 1, 2, 2, 3, 3, 5, 4, 8, 5, 9, 1)"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest></WriteSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>VAR state := PARSEJSON(report2, "$.State");
+SWITCH(State, 0, 1, 1, 2, 2, 3, 3, 5, 4, 8, 5, 9, 1)</ReadSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
 					<Name>Keba User Current [A]</Name>
-					<Id>-7</Id>
 					<Model>PacketParserVariable</Model>
 					<DeviceProperties>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
 						<IsReadOnly>False</IsReadOnly>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE, \"$.['Curr user']\") / 1000.0"}</ReadStateRequest>
-						<WriteStateRequest>{"Content":{"Script":"\"curr \" + Va*1000","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteStateRequest>
+						<ListenerScriptPacketParser>Va := PARSEJSON(report2, "$.['Curr user']", 1) / 1000.0</ListenerScriptPacketParser>
+						<WriteStateScriptPacketParser>VAR command := "curr " + Va*1000;
+SENDDATA(TOBYTES(command));</WriteStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
