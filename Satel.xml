@@ -2317,8 +2317,6 @@ END</ListenerScriptPacketParser>
 
 IF(cmd = 0)
    Rc := (BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x40) &gt; 0;
-ELSE
-   Rc := NaN;
 END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
@@ -2335,8 +2333,6 @@ END</ListenerScriptPacketParser>
 
 IF(cmd = 0)
    Rc := (BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x80) &gt; 0;
-ELSE
-   Rc := NaN;
 END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
