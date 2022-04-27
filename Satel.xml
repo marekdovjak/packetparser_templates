@@ -26,15 +26,14 @@
 		</ImportParameters>
 		<Module>
 			<Name>Satel</Name>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleTcp</Model>
 			<DeviceProperties>
 				<IpAddress>$[IpAddress]</IpAddress>
 				<Port>$[Port]</Port>
-				<ConnectionType>tcp</ConnectionType>
-				<StayConnected>False</StayConnected>
+				<StayConnected>True</StayConnected>
 				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-				<ReadRequest>{"Content":{"Script":"BYTETEXT(\"FE FE 00 D7 E2 FE 0D\")","IsPlainText":false},"Mode":2,"ParseScript":"RAWRESPONSE := PARSETEXT(MODULERESPONSE, BYTETEXT(\"FE FE 00\"));"}</ReadRequest>
-				<CustomVariables>[{"Name":"RAWRESPONSE","ValueTypeId":2,"NumericValue":0,"StringValue":""}]</CustomVariables>
+				<ReadScriptPacketParser>SENDDATA(BYTEARRAY("00"));</ReadScriptPacketParser>
+				<MessageFramingDefinition>{"Framing":2,"Configuration":""}</MessageFramingDefinition>
 			</DeviceProperties>
 			<Devices>
 				<Device>
@@ -46,7 +45,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -58,7 +63,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -70,7 +81,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -82,7 +99,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -94,7 +117,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -106,7 +135,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -118,7 +153,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -130,7 +171,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,0) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,1) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -142,7 +189,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -154,7 +207,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -166,7 +225,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -178,7 +243,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -190,7 +261,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -202,7 +279,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -214,7 +297,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -226,7 +315,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,1) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,2) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -238,7 +333,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -250,7 +351,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -262,7 +369,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -274,7 +387,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -286,7 +405,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -298,7 +423,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -310,7 +441,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -322,7 +459,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,2) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,3) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -334,7 +477,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -346,7 +495,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -358,7 +513,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -370,7 +531,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -382,7 +549,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -394,7 +567,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -406,7 +585,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -418,7 +603,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,3) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,4) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -430,7 +621,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -442,7 +639,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -454,7 +657,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -466,7 +675,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -478,7 +693,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -490,7 +711,13 @@
 							<OffStateIconId>88</OffStateIconId>
 							<OnStateName>${general_open}</OnStateName>
 							<OffStateName>${general_closed}</OffStateName>
-							<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+							<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 						</DeviceProperties>
 					</Device>
 				<Device>
@@ -502,7 +729,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -514,7 +747,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,4) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,5) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -526,7 +765,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -538,7 +783,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -550,7 +801,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -562,7 +819,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -574,7 +837,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -586,7 +855,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -598,7 +873,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -610,7 +891,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,5) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,6) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -622,7 +909,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -634,7 +927,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -646,7 +945,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -658,7 +963,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -670,7 +981,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -682,7 +999,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -694,7 +1017,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -706,7 +1035,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,6) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,7) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -718,7 +1053,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -730,7 +1071,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -742,7 +1089,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -754,7 +1107,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -766,7 +1125,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -778,7 +1143,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -790,7 +1161,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -802,7 +1179,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,7) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,8) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -814,7 +1197,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -826,7 +1215,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -838,7 +1233,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -850,7 +1251,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -862,7 +1269,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -874,7 +1287,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -886,7 +1305,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -898,7 +1323,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,8) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,9) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -910,7 +1341,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -922,7 +1359,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -934,7 +1377,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -946,7 +1395,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -958,7 +1413,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -970,7 +1431,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -982,7 +1449,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -994,7 +1467,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,9) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,10) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1006,7 +1485,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1018,7 +1503,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1030,7 +1521,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1042,7 +1539,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1054,7 +1557,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1066,7 +1575,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1078,7 +1593,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1090,7 +1611,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,10) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,11) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1102,7 +1629,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1114,7 +1647,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1126,7 +1665,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1138,7 +1683,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1150,7 +1701,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1162,7 +1719,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1174,7 +1737,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1186,7 +1755,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,11) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,12) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1198,7 +1773,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1210,7 +1791,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1222,7 +1809,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1234,7 +1827,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1246,7 +1845,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1258,7 +1863,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1270,7 +1881,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1282,7 +1899,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,12) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,13) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1294,7 +1917,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1306,7 +1935,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1318,7 +1953,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1330,7 +1971,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1342,7 +1989,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1354,7 +2007,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1366,7 +2025,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1378,7 +2043,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,13) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,14) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1390,7 +2061,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1402,7 +2079,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1414,7 +2097,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1426,7 +2115,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1438,7 +2133,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1450,7 +2151,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1462,7 +2169,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1474,7 +2187,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,14) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,15) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1486,7 +2205,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x01) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x01) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1498,7 +2223,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x02) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x02) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1510,7 +2241,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x04) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x04) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1522,7 +2259,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x08) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x08) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1534,7 +2277,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x10) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x10) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1546,7 +2295,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x20) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x20) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1558,7 +2313,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x40) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x40) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -1570,7 +2331,13 @@
 						<OffStateIconId>88</OffStateIconId>
 						<OnStateName>${general_open}</OnStateName>
 						<OffStateName>${general_closed}</OffStateName>
-						<ReadStateRequest>{"Content":{"Script":null,"IsPlainText":true},"Mode":1,"ParseScript":"(GETTEXTBYTE(RAWRESPONSE,15) &amp; 0x80) &gt; 0"}</ReadStateRequest>
+						<ListenerScriptPacketParser>VAR cmd := BYTEARRAYGETBYTE(RECEIVEDBYTES,0);
+
+IF(cmd = 0)
+   Rc := BYTEARRAYGETBYTE(RECEIVEDBYTES,16) &amp; 0x80) &gt; 0;
+ELSE
+   Rc := NaN;
+END</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
