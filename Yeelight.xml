@@ -63,6 +63,7 @@ IF(id = 981)
       END
    END
 END</ListenerScriptPacketParser>
+				<MessageFramingDefinition>{"Framing":1,"Configuration":"{\"SendMessageBeginDelimiter\":null,\"SendMessageEndDelimiter\":\"DQo=\",\"ReceiveMessageBeginDelimiter\":null,\"ReceiveMessageEndDelimiter\":\"DQo=\"}"}</MessageFramingDefinition>
 			</DeviceProperties>
 			<Devices>
 				<Device>
