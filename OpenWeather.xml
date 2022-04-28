@@ -33,13 +33,16 @@
 				<InternalPollInterval>300000</InternalPollInterval>
 				<ReadScriptPacketParser>responseJson := "error";
 
-VAR path := "data/2.5/onecall?units=metric&amp;lat=" + latitude + "&amp;lon=" + longitude + "&amp;appid=" + AppId;
+VAR path := "data/2.5/onecall?units=metric&lat=" + latitude + "&lon=" + longitude + "&appid=" + AppId;
 VAR response := SENDHTTPREQUEST(path);
 
 IF(PARSEJSON(response, "IsSuccess") = 1)
     responseJson := PARSEJSON(response, "Content");
 ELSE
-    ADDERROR("Failed to read data");
+    VAR contentJson := PARSEJSON(response, "Content");
+    VAR errCode := PARSEJSON(response, "StatusCode");
+    VAR message := PARSEJSON(contentJson, "message");
+    ADDERROR("Failed to read data - (" + errCode + ") " + message);
 END</ReadScriptPacketParser>
 				<CustomVariables>[{"Name":"latitude","ValueTypeId":2,"NumericValue":48.56497004696078,"StringValue":"48.56497004696078"},{"Name":"longitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"17.42407715713157"},{"Name":"appid","ValueTypeId":2,"NumericValue":0.0,"StringValue":"4ca74898c80c6f438bed0a0594c185b7"},{"Name":"responseJson","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
 			</DeviceProperties>
