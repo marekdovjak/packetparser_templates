@@ -159,14 +159,14 @@ SENDDATA("heos://player/set_mute?pid=" + PlayerId + "&amp;state=" + mute);</Writ
 						<ListenerScriptPacketParser>VAR responseJson := TOSTRING(RECEIVEDBYTES);
 
 IF(PARSEJSON(responseJson, "heos.command", 1) = "player/get_play_mode")
-    VAR repeat := PARSETEXT(VALUERESPONSE, "repeat=", "&amp;");
-    VAR shuffle := PARSETEXT(VALUERESPONSE, "shuffle=");
+    VAR repeat := PARSETEXT(responseJson, "repeat=", "&amp;");
+    VAR shuffle := PARSETEXT(responseJson, "shuffle=");
 
     Mu := SWITCH(repeat, "off", 0, "on_all", 1, "on_one", 2, 0) + SWITCH(shuffle, "off", 0, "on", 3, 0);
 END</ListenerScriptPacketParser>
 						<WriteSwitchStateScriptPacketParser>VAR repeat := SWITCH( IF(Mu &gt; 2, Mu - 3, Mu), 0, "off", 1, "on_all", 2, "on_one", "off");
 VAR shuffle := IF(Mu &gt; 2, "on", "off");
-SENDDATA("heos://player/set_play_mode?pid=" + PlayerId + "&amp;repeat=" + repeat + "&amp;shuffle=" + shuffle);"</WriteSwitchStateScriptPacketParser>
+SENDDATA("heos://player/set_play_mode?pid=" + PlayerId + "&amp;repeat=" + repeat + "&amp;shuffle=" + shuffle);</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
