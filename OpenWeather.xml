@@ -58,6 +58,7 @@ END</ReadScriptPacketParser>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
 						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.feels_like"))</ReadTemperatureScriptPacketParser>
+					</DeviceProperties>
 				</Device>
 				<Device>
 					<Name>Current Air Pressure [hPa]</Name>
