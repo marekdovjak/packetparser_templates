@@ -20,14 +20,14 @@
 		</ImportParameters>
 		<Module>
 			<Name>Denon HEOS speaker</Name>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleTcp</Model>
 			<DeviceProperties>
 				<InternalPollInterval>15000</InternalPollInterval>
 				<IpAddress>$[ipAddress]</IpAddress>
 				<Port>1255</Port>
-				<ConnectionType>tcp</ConnectionType>
 				<StayConnected>False</StayConnected>
 				<CustomVariables>[{"Name":"PlayerId","ValueTypeId":1,"NumericValue":12345.0,"StringValue":null}]</CustomVariables>
+				<MessageFramingDefinition>{"Framing":1,"Configuration":"{\"SendMessageBeginDelimiter\":null,\"SendMessageEndDelimiter\":\"DQo=\",\"ReceiveMessageBeginDelimiter\":null,\"ReceiveMessageEndDelimiter\":\"DQo=\"}"}</MessageFramingDefinition>
 			</DeviceProperties>
 			<Devices>
 				<Device>
@@ -35,8 +35,10 @@
 					<Model>PacketParserDimmer</Model>
 					<DeviceProperties>
 						<InternalPollInterval>2500</InternalPollInterval>
-						<ReadLevelRequest>{"Content":{"Script":"\"heos://player/get_volume?pid=\" + PlayerId + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":"PARSETEXT(VALUERESPONSE,\"level=\") / 100.0"}</ReadLevelRequest>
-						<WriteLevelRequest>{"Content":{"Script":"\"heos://player/set_volume?pid=\" + PlayerId + \"&amp;level=\" + ROUND(Le*100) + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteLevelRequest>
+						<ListenerScriptPacketParser>VAR responseJson := TOSTRING(RECEIVEDBYTES);
+Le := PARSETEXT(responseJson,"level=") / 100.0;</ListenerScriptPacketParser>
+            <ReadLevelScriptPacketParser />
+            <WriteLevelScriptPacketParser>SENDDATA("heos://player/set_volume?pid=" + PlayerId + "&amp;level=" + ROUND(Le*100))</WriteLevelScriptPacketParser>
 						<IconId>0</IconId>
 					</DeviceProperties>
 				</Device>
@@ -44,7 +46,7 @@
 					<Name>Volume Up</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/volume_up?pid=\" + PlayerId + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/volume_up?pid=" + PlayerId);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>207</IconId>
 					</DeviceProperties>
 				</Device>
@@ -52,7 +54,7 @@
 					<Name>Volume Down</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/volume_down?pid=\" + PlayerId + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/volume_down?pid=" + PlayerId);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>208</IconId>
 					</DeviceProperties>
 				</Device>
@@ -65,15 +67,21 @@
 						<OffStateIconId>61</OffStateIconId>
 						<OnStateName>${general_on}</OnStateName>
 						<OffStateName>${general_off}</OffStateName>
-						<ReadSwitchStateRequest>{"Content":{"Script":"\"heos://player/get_mute?pid=\" + PlayerId + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":"VAR mute := PARSETEXT(VALUERESPONSE, \"state=\");\r\nSWITCH(mute, \"off\", 0, \"on\", 1, 0)"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest>{"Content":{"Script":"VAR mute := SWITCH(St, 0, \"off\", 1, \"on\",\"off\");\r\n\"heos://player/set_mute?pid=\" + PlayerId + \"&amp;state=\" + mute + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>SENDDATA("heos://player/get_mute?pid=" + PlayerId);</ReadSwitchStateScriptPacketParser>
+						<ListenerScriptPacketParser>VAR responseJson := TOSTRING(RECEIVEDBYTES);
+						
+VAR mute := PARSETEXT(responseJson, "state=");
+Mu := SWITCH(mute, "off", 0, "on", 1, 0);
+</ListenerScriptPacketParser>
+						<WriteSwitchStateScriptPacketParser>VAR mute := SWITCH(St, 0, "off", 1, "on", "off");
+SENDDATA(heos://player/set_mute?pid=" + PlayerId + "&amp;state=" + mute);</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
 					<Name>Pause</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/set_play_state?pid=\" + PlayerId + \"&amp;state=pause\"+BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/set_play_state?pid=" + PlayerId + "&amp;state=pause")</WriteButtonPressedStateScriptPacketParser>
 						<IconId>214</IconId>
 					</DeviceProperties>
 				</Device>
@@ -81,7 +89,7 @@
 					<Name>Resume</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/set_play_state?pid=\" + PlayerId + \"&amp;state=play\"+BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/set_play_state?pid=" + PlayerId + "&amp;state=play");</WriteButtonPressedStateScriptPacketParser>
 						<IconId>213</IconId>
 					</DeviceProperties>
 				</Device>
@@ -89,7 +97,7 @@
 					<Name>Next</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/play_next?pid=\" + PlayerId + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/play_next?pid=" + PlayerId);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>212</IconId>
 					</DeviceProperties>
 				</Device>
@@ -97,7 +105,7 @@
 					<Name>Previous</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/play_previous?pid=\" + PlayerId + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/play_previous?pid=" + PlayerId);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>211</IconId>
 					</DeviceProperties>
 				</Device>
@@ -105,7 +113,7 @@
 					<Name>Stop</Name>
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
-						<WriteButtonPressedStateRequest>{"Content":{"Script":"\"heos://player/set_play_state?pid=\" + PlayerId + \"&amp;state=stop\" + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>SENDDATA("heos://player/set_play_state?pid=" + PlayerId + "&amp;state=stop")</WriteButtonPressedStateScriptPacketParser>
 						<IconId>215</IconId>
 					</DeviceProperties>
 				</Device>
@@ -143,8 +151,16 @@
 						<Value7IconId>12</Value7IconId>
 						<Value8IconId>13</Value8IconId>
 						<Value9IconId>14</Value9IconId>
-						<ReadSwitchStateRequest>{"Content":{"Script":"\"heos://player/get_play_mode?pid=\" + PlayerId + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":"VAR repeat := PARSETEXT(VALUERESPONSE, \"repeat=\", \"&amp;\");\r\nVAR shuffle := PARSETEXT(VALUERESPONSE, \"shuffle=\", \"}\");\r\n\r\nSWITCH(repeat, \"off\", 0, \"on_all\", 1, \"on_one\", 2, 0) + SWITCH(shuffle, \"off\", 0, \"on\", 3, 0)"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest>{"Content":{"Script":"var repeat := SWITCH( IF(Mu &gt; 2, Mu - 3, Mu), 0, \"off\", 1, \"on_all\", 2, \"on_one\", \"off\");\r\nvar shuffle := IF(Mu &gt; 2, \"on\", \"off\");\r\n\r\n\"heos://player/set_play_mode?pid=\" + PlayerId + \"&amp;repeat=\" + repeat + \"&amp;shuffle=\" + shuffle + BYTETEXT(\"0D0A\")","IsPlainText":false},"Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>SENDDATA("heos://player/get_play_mode?pid=" + PlayerId);</ReadSwitchStateScriptPacketParser>
+						<ListenerScriptPacketParser>VAR responseJson := TOSTRING(RECEIVEDBYTES);
+						
+VAR repeat := PARSETEXT(VALUERESPONSE, "repeat=", "&amp;");
+VAR shuffle := PARSETEXT(VALUERESPONSE, "shuffle=");
+
+Mu := SWITCH(repeat, "off", 0, "on_all", 1, "on_one", 2, 0) + SWITCH(shuffle, "off", 0, "on", 3, 0);</ListenerScriptPacketParser>
+						<WriteSwitchStateScriptPacketParser>VAR repeat := SWITCH( IF(Mu &gt; 2, Mu - 3, Mu), 0, "off", 1, "on_all", 2, "on_one", "off");
+VAR shuffle := IF(Mu &gt; 2, "on", "off");
+SENDDATA("heos://player/set_play_mode?pid=" + PlayerId + "&amp;repeat=" + repeat + "&amp;shuffle=" + shuffle);"</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>

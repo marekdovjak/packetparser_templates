@@ -26,6 +26,7 @@
 				<IpAddress>$[ipAddress]</IpAddress>
 				<Port>1255</Port>
 				<StayConnected>False</StayConnected>
+				<MessageFramingDefinition>{"Framing":1,"Configuration":"{\"SendMessageBeginDelimiter\":null,\"SendMessageEndDelimiter\":\"DQo=\",\"ReceiveMessageBeginDelimiter\":null,\"ReceiveMessageEndDelimiter\":\"DQo=\"}"}</MessageFramingDefinition>
 			</DeviceProperties>
 			<Devices>
 				<Device>
