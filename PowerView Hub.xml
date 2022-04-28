@@ -21,12 +21,10 @@
 		</ImportParameters>
 		<Module>
 			<Name>PowerView Hub</Name>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleHttp</Model>
 			<DeviceProperties>
 				<IpAddress>$[IpAddress]</IpAddress>
 				<Port>80</Port>
-				<StayConnected>False</StayConnected>
-				<ConnectionType>http</ConnectionType>
 				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
 				<CustomVariables>[{"Name":"SlideDeviceId","ValueTypeId":1,"NumericValue":1.0,"StringValue":null}]</CustomVariables>
 			</DeviceProperties>
@@ -36,8 +34,22 @@
 					<Model>PacketParserSlide</Model>
 					<DeviceProperties>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-						<ReadBlindsLevelRequest>{"Path":{"Script":"\"/api/shades/\" + SlideDeviceId","IsPlainText":false},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":2,"ParseScript":"VAR pos := PARSEJSON(VALUERESPONSE, \"$.shade.positions.position1\");\r\n\r\n1 - (pos/65535)"}</ReadBlindsLevelRequest>
-						<WriteBlindsLevelRequest>{"Path":{"Script":"\"/api/shades/\" + SlideDeviceId","IsPlainText":false},"Content":{"Script":"VAR pos := ROUND((1 - Bl) * 65535);\r\n\r\n\"{\\\"shade\\\": { \\\"positions\\\": { \\\"posKind1\\\": 1, \\\"position1\\\":\" + pos + \"}}}\"","IsPlainText":false},"Headers":{"Script":"Content-Type:application/json","IsPlainText":true},"Method":"PUT","Mode":2,"ParseScript":null}</WriteBlindsLevelRequest>
+            <ReadBlindsLevelScriptPacketParser>VAR response := SENDHTTPREQUEST("api/shades/" + SlideDeviceId);
+
+IF(PARSEJSON(response, "IsSuccess"))
+    VAR responseJson := PARSEJSON(response, "Content");
+    VAR pos := PARSEJSON(responseJson, "$.shade.positions.position1");
+    RETURN(1 - (pos/65535));
+ELSE
+    ADDERROR(PARSEJSON(response, "Content"));
+    RETURN(NaN);
+END</ReadBlindsLevelScriptPacketParser>
+            <WriteBlindsLevelScriptPacketParser>VAR headers := "Content-Type:application/json";
+VAR pos := ROUND((1 - Bl) * 65535);
+VAR contentJson := "{\"shade\": { \"positions\": { \"posKind1\": 1, \"position1\":" + pos + "}}}";
+
+SENDHTTPREQUEST("/api/shades/" + SlideDeviceId, "PUT", contentJson, headers);
+</WriteBlindsLevelScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
