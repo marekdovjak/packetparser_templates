@@ -377,6 +377,7 @@ SWITCH(weather, "Rain", PARSEJSON(responseJson, "hourly[0].rain.1h"), "Snow",  P
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
 						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].dew_point"))</ReadTemperatureScriptPacketParser>
+					</DeviceProperties>
 				</Device>
 				<Device>
 					<Name>Daily Clouds [%]</Name>
