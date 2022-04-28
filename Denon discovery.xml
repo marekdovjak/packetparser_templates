@@ -20,12 +20,11 @@
 		</ImportParameters>
 		<Module>
 			<Name>Denon discovery</Name>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleTcp</Model>
 			<DeviceProperties>
 				<InternalPollInterval>15000</InternalPollInterval>
 				<IpAddress>$[ipAddress]</IpAddress>
 				<Port>1255</Port>
-				<ConnectionType>tcp</ConnectionType>
 				<StayConnected>False</StayConnected>
 			</DeviceProperties>
 			<Devices>
@@ -33,9 +32,11 @@
 					<Name>Denon player id</Name>
 					<Model>PacketParserVariable</Model>
 					<DeviceProperties>
-						<InternalPollInterval>5000</InternalPollInterval>
+						<InternalPollInterval>15000</InternalPollInterval>
 						<IsReadOnly>False</IsReadOnly>
-						<ReadStateRequest>{"Content":{"Script":"\"heos://player/get_players\" + BYTETEXT(\"0d0a\")","IsPlainText":false},"Mode":2,"ParseScript":"PARSEJSON(VALUERESPONSE,\"$.payload[0].pid\")"}</ReadStateRequest>
+						<ReadScriptPacketParser>SENDDATA("heos://player/get_players")</ReadScriptPacketParser>
+						<ListenerScriptPacketParser>VAR responseJson := TOSTRING(RECEIVEDBYTES);
+Va := PARSEJSON(responseJson,"$.payload[0].pid", 1);</ListenerScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
