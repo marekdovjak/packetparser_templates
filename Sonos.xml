@@ -80,9 +80,9 @@ SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);</Wr
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
 						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Play";
-VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Play xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Play&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Play xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Play&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
+VAR response := SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>86</IconId>
 					</DeviceProperties>
 				</Device>
