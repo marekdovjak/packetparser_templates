@@ -33,7 +33,7 @@
 				<InternalPollInterval>300000</InternalPollInterval>
 				<ReadScriptPacketParser>responseJson := "error";
 
-VAR path := "data/2.5/onecall?units=metric&lat=" + latitude + "&lon=" + longitude + "&appid=" + AppId;
+VAR path := "data/2.5/onecall?units=metric&amp;lat=" + latitude + "&amp;lon=" + longitude + "&amp;appid=" + AppId;
 VAR response := SENDHTTPREQUEST(path);
 
 IF(PARSEJSON(response, "IsSuccess") = 1)
