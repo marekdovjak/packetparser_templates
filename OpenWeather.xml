@@ -44,7 +44,7 @@ ELSE
     VAR message := PARSEJSON(contentJson, "message");
     ADDERROR("Failed to read data - (" + errCode + ") " + message);
 END</ReadScriptPacketParser>
-				<CustomVariables>[{"Name":"latitude","ValueTypeId":2,"NumericValue":48.56497004696078,"StringValue":"48.56497004696078"},{"Name":"longitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"17.42407715713157"},{"Name":"appid","ValueTypeId":2,"NumericValue":0.0,"StringValue":"4ca74898c80c6f438bed0a0594c185b7"},{"Name":"responseJson","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
+				<CustomVariables>[{"Name":"longitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[longitude]"}, {"Name":"latitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[latitude]"}, {"Name":"AppId","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[appid]"},{"Name":"responseJson","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
 			</DeviceProperties>
 			<Devices>
 				<Device>
