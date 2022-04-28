@@ -26,14 +26,22 @@
 		</ImportParameters>
 		<Module>
 			<Name>OpenWeather - current, hourly, daily data</Name>
-			<Model>PacketParserModule</Model>
+			<Model>PacketParserModuleHttp</Model>
 			<DeviceProperties>
 				<IpAddress>api.openweathermap.org</IpAddress>
 				<Port>80</Port>
-				<ConnectionType>http</ConnectionType>
 				<InternalPollInterval>300000</InternalPollInterval>
-				<ReadRequest>{"Path":{"Script":"\"data/2.5/onecall?units=metric&amp;lat=\" + latitude + \"&amp;lon=\" + longitude + \"&amp;appid=\" + AppId","IsPlainText":false},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":2,"ParseScript":null}</ReadRequest>
-				<CustomVariables>[{"Name":"longitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[longitude]"}, {"Name":"latitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[latitude]"}, {"Name":"AppId","ValueTypeId":2,"NumericValue":0.0,"StringValue":"$[appid]"}]</CustomVariables>
+				<ReadScriptPacketParser>responseJson := "error";
+
+VAR path := "data/2.5/onecall?units=metric&amp;lat=" + latitude + "&amp;lon=" + longitude + "&amp;appid=" + AppId;
+VAR response := SENDHTTPREQUEST(path);
+
+IF(PARSEJSON(response, "IsSuccess") = 1)
+    responseJson := PARSEJSON(response, "Content");
+ELSE
+    ADDERROR("Failed to read data");
+END</ReadScriptPacketParser>
+				<CustomVariables>[{"Name":"latitude","ValueTypeId":2,"NumericValue":48.56497004696078,"StringValue":"48.56497004696078"},{"Name":"longitude","ValueTypeId":2,"NumericValue":0.0,"StringValue":"17.42407715713157"},{"Name":"appid","ValueTypeId":2,"NumericValue":0.0,"StringValue":"4ca74898c80c6f438bed0a0594c185b7"},{"Name":"responseJson","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
 			</DeviceProperties>
 			<Devices>
 				<Device>
@@ -41,7 +49,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.temp\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.temp"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -49,8 +57,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.feels_like\")"}</ReadTemperatureRequest>
-					</DeviceProperties>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.feels_like"))</ReadTemperatureScriptPacketParser>
 				</Device>
 				<Device>
 					<Name>Current Air Pressure [hPa]</Name>
@@ -58,7 +65,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.pressure\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.pressure"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -67,7 +74,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.humidity\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.humidity"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -75,7 +82,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.dew_point\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.dew_point"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -84,7 +91,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.clouds\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.clouds"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -93,7 +100,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.uvi\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.uvi"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -102,7 +109,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.visibility\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.visibility"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -111,7 +118,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.wind_speed\")*3.6"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.wind_speed")*3.6)</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -120,7 +127,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"current.wind_deg\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.wind_deg"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -159,7 +166,12 @@
 						<Value7IconId>12</Value7IconId>
 						<Value8IconId>13</Value8IconId>
 						<Value9IconId>14</Value9IconId>
-						<ReadSwitchStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE,\"current.weather[0].main\");\r\nSWITCH(weather,\"Clear\", 0, \"Clouds\", 1, \"Rain\", 2, \"Drizzle\", 3, \"Thunderstorm \", 4, \"Snow\", 5, \"Mist\", 6, \"Smoke\", 6, \"Haze\", 6, \"Dust\", 6, \"Fog\", 6, \"Sand\", 6, \"Ash\", 6, \"Squall\", 6, \"Tornado\", 6, 0)"}</ReadSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "current.weather[0].main");
+SWITCH(weather, "Clear", 0, "Clouds", 1, "Rain", 2, "Drizzle", 3, "Thunderstorm", 4, "Snow", 5, "Mist", 6, "Smoke", 6, "Haze", 6, "Dust", 6, "Fog", 6, "Sand", 6, "Ash", 6, "Squall", 6, "Tornado", 6, 0);</ReadSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -168,16 +180,21 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE, \"current.weather[0].main\");\r\n\r\nSWITCH(weather, \"Rain\", PARSEJSON(MODULERESPONSE, \"current.rain.1h\"), \"Snow\",  PARSEJSON(MODULERESPONSE, \"current.snow.1h\"), 0)"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "current.weather[0].main");
+SWITCH(weather, "Rain", PARSEJSON(responseJson, "current.rain.1h"), "Snow",  PARSEJSON(responseJson, "current.snow.1h") ,0);
+</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
-				
 				<Device>
 					<Name>Hourly Air Temperature</Name>
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].temp\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].temp"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -185,7 +202,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].feels_like\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].feels_like"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -194,7 +211,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].pressure\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].pressure"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -203,7 +220,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].humidity\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].humidity"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -211,7 +228,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].dew_point\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].dew_point"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -220,7 +237,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].clouds\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].clouds"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -229,7 +246,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].uvi\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].uvi"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -238,7 +255,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR visibility := PARSEJSON(MODULERESPONSE,\"hourly[0].visibility\", 1);\r\nIF(visibility, visibility, 10000)"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].visibility"))</ReadStateScriptPacketParser>						
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -247,7 +264,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].wind_speed\")*3.6"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].wind_speed")*3.6)</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -256,7 +273,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"hourly[0].wind_deg\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].wind_deg"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -295,7 +312,12 @@
 						<Value7IconId>12</Value7IconId>
 						<Value8IconId>13</Value8IconId>
 						<Value9IconId>14</Value9IconId>
-						<ReadSwitchStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE,\"hourly[0].weather[0].main\");\r\nSWITCH(weather,\"Clear\", 0, \"Clouds\", 1, \"Rain\", 2, \"Drizzle\", 3, \"Thunderstorm \", 4, \"Snow\", 5, \"Mist\", 6, \"Smoke\", 6, \"Haze\", 6, \"Dust\", 6, \"Fog\", 6, \"Sand\", 6, \"Ash\", 6, \"Squall\", 6, \"Tornado\", 6, 0)"}</ReadSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "hourly[0].weather[0].main");
+SWITCH(weather, "Clear", 0, "Clouds", 1, "Rain", 2, "Drizzle", 3, "Thunderstorm", 4, "Snow", 5, "Mist", 6, "Smoke", 6, "Haze", 6, "Dust", 6, "Fog", 6, "Sand", 6, "Ash", 6, "Squall", 6, "Tornado", 6, 0);</ReadSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -304,7 +326,13 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE, \"hourly[0].weather[0].main\");\r\n\r\nSWITCH(weather, \"Rain\", PARSEJSON(MODULERESPONSE, \"hourly[0].rain.1h\"), \"Snow\",  PARSEJSON(MODULERESPONSE, \"hourly[0].snow.1h\"), 0)"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "hourly[0].weather[0].main");
+SWITCH(weather, "Rain", PARSEJSON(responseJson, "hourly[0].rain.1h"), "Snow",  PARSEJSON(responseJson, "hourly[0].snow.1h") ,0);
+</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 
@@ -313,7 +341,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].temp.day\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].temp.day"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -321,7 +349,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].feels_like.day\")"}</ReadTemperatureRequest>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].feels_like.day"))</ReadTemperatureScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -330,7 +358,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].pressure\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].pressure"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -339,7 +367,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].humidity\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].humidity"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -347,8 +375,7 @@
 					<Model>PacketParserTemperatureSensor</Model>
 					<DeviceProperties>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadTemperatureRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].dew_point\")"}</ReadTemperatureRequest>
-					</DeviceProperties>
+						<ReadTemperatureScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].dew_point"))</ReadTemperatureScriptPacketParser>
 				</Device>
 				<Device>
 					<Name>Daily Clouds [%]</Name>
@@ -356,7 +383,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].clouds\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].clouds"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -365,7 +392,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].uvi\")"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].uvi"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -374,7 +401,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR visibility := PARSEJSON(MODULERESPONSE,\"daily[0].visibility\", 1);\r\nIF(visibility, visibility, 10000)"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].visibility"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -383,7 +410,7 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].wind_speed\")*3.6"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].wind_speed" * 3.6))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -391,8 +418,8 @@
 					<Model>PacketParserVariable</Model>
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
-						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"PARSEJSON(MODULERESPONSE,\"daily[0].wind_deg\")"}</ReadStateRequest>
+						<InternalPollInterval>300000</InternalPollInterval>\
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"daily[0].wind_deg"))</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -431,7 +458,12 @@
 						<Value7IconId>12</Value7IconId>
 						<Value8IconId>13</Value8IconId>
 						<Value9IconId>14</Value9IconId>
-						<ReadSwitchStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE,\"daily[0].weather[0].main\");\r\nSWITCH(weather,\"Clear\", 0, \"Clouds\", 1, \"Rain\", 2, \"Drizzle\", 3, \"Thunderstorm \", 4, \"Snow\", 5, \"Mist\", 6, \"Smoke\", 6, \"Haze\", 6, \"Dust\", 6, \"Fog\", 6, \"Sand\", 6, \"Ash\", 6, \"Squall\", 6, \"Tornado\", 6, 0)"}</ReadSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "daily[0].weather[0].main");
+SWITCH(weather, "Clear", 0, "Clouds", 1, "Rain", 2, "Drizzle", 3, "Thunderstorm", 4, "Snow", 5, "Mist", 6, "Smoke", 6, "Haze", 6, "Dust", 6, "Fog", 6, "Sand", 6, "Ash", 6, "Squall", 6, "Tornado", 6, 0);</ReadSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -440,7 +472,13 @@
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateRequest>{"Path":{"Script":null,"IsPlainText":true},"Content":{"Script":null,"IsPlainText":true},"Headers":{"Script":null,"IsPlainText":true},"Method":"GET","Mode":1,"ParseScript":"VAR weather := PARSEJSON(MODULERESPONSE, \"daily[0].weather[0].main\");\r\n\r\nSWITCH(weather, \"Rain\", PARSEJSON(MODULERESPONSE, \"daily[0].rain\"), \"Snow\",  PARSEJSON(MODULERESPONSE, \"daily[0].snow\"), 0)"}</ReadStateRequest>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+	return(NaN);
+END
+
+VAR weather := PARSEJSON(responseJson, "daily[0].weather[0].main");
+SWITCH(weather, "Rain", PARSEJSON(responseJson, "daily[0].rain.1h"), "Snow",  PARSEJSON(responseJson, "daily[0].snow.1h") ,0);
+</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
