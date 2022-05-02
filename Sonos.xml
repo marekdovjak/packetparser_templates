@@ -252,7 +252,7 @@ SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);</Wr
 					<DeviceProperties>
 					<ReadScriptPacketParser />
 					<InternalPollInterval>10000</InternalPollInterval>
-					<CustomVariables>[{"Name":"playlist_name","ValueTypeId":2,"NumericValue":0.0,"StringValue":"Tttt"}]</CustomVariables>
+					<CustomVariables>[{"Name":"playlist_name","ValueTypeId":2,"NumericValue":0.0,"StringValue":""}]</CustomVariables>
 					<ServiceAttributesScriptsPacketParser></ServiceAttributesScriptsPacketParser>
 					<ServiceActionsScriptsPacketParser></ServiceActionsScriptsPacketParser>
 					<WriteButtonPressedStateScriptPacketParser>######################
