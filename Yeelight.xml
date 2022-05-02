@@ -73,8 +73,6 @@ END</ListenerScriptPacketParser>
 						<ReadScriptPacketParser></ReadScriptPacketParser>
 						<InternalPollInterval>10000</InternalPollInterval>
 						<CustomVariables />
-						<ServiceAttributesRequests></ServiceAttributesRequests>
-						<ServiceActionsRequests></ServiceActionsRequests>
 						<ListenerScriptPacketParser>VAR jsonResponse := TOSTRING(RECEIVEDBYTES);
 VAR method := PARSEJSON(jsonResponse, "method", 1);
 VAR id := PARSEJSON(jsonResponse, "id", 1);
