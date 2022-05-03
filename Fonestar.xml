@@ -27,12 +27,12 @@
 				<Device>
 					<Name>Volume</Name>
 					<Model>PacketParserDimmer</Model>
-										<DeviceProperties>
+					<DeviceProperties>
 						<InternalPollInterval>2500</InternalPollInterval>
 						<ReadLevelScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#GetVolume\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
-VAR body := "&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"&gt;&lt;s:Body&gt;&lt;u:GetVolume xmlns:u="urn:schemas-upnp-org:service:RenderingControl:1"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetVolume xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-VAR response := SENDHTTPREQUEST("rendercontrol1", "POST", body, headers);
+VAR response := SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, headers);
 
 IF(PARSEJSON(response, "IsSuccess", 1) = 1)
     VAR responseXml := PARSEJSON(response, "Content");
@@ -42,9 +42,9 @@ ELSE
     RETURN(NaN);
 END</ReadLevelScriptPacketParser>
 						<WriteLevelScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetVolume\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
-VAR body := "&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"&gt;&lt;s:Body&gt;&lt;u:SetVolume xmlns:u="urn:schemas-upnp-org:service:RenderingControl:1"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredVolume&gt;" + ROUND(Le * 100) + "&lt;/DesiredVolume&gt;&lt;/u:SetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:SetVolume xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredVolume&gt;" + ROUND(Le * 100) + "&lt;/DesiredVolume&gt;&lt;/u:SetVolume&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-SENDHTTPREQUEST("rendercontrol1", "POST", body, headers);
+SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, headers);
 </WriteLevelScriptPacketParser>
 						<IconId>0</IconId>
 					</DeviceProperties>
@@ -55,9 +55,9 @@ SENDHTTPREQUEST("rendercontrol1", "POST", body, headers);
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
 						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Next\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
-VAR body := "&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"&gt;&lt;s:Body&gt;&lt;u:Next xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Next&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Next xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Next&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>212</IconId>
 					</DeviceProperties>
 				</Device>
@@ -67,9 +67,9 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
 						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Pause\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
-VAR body := "&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"&gt;&lt;s:Body&gt;&lt;u:Pause xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Pause&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Pause xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Pause&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>214</IconId>
 					</DeviceProperties>
 				</Device>
@@ -78,7 +78,10 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
-						<WriteButtonPressedStateRequest>{"Path":{"Script":"upnp/control/rendertransport1","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Play xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Play&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Play\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Play\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Play xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Play&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>86</IconId>
 					</DeviceProperties>
 				</Device>
@@ -87,7 +90,10 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
-						<WriteButtonPressedStateRequest>{"Path":{"Script":"/upnp/control/rendertransport1","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Previous xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Previous&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Previous\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Previous\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Previous xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:Previous&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>211</IconId>
 					</DeviceProperties>
 				</Device>
@@ -96,7 +102,10 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 					<Model>PacketParserPushButton</Model>
 					<DeviceProperties>
 						<InternalPollInterval>10000</InternalPollInterval>
-						<WriteButtonPressedStateRequest>{"Path":{"Script":"upnp/control/rendertransport1","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Stop xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Stop&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Stop\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteButtonPressedStateRequest>
+						<WriteButtonPressedStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#Stop\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Stop xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Speed&gt;1&lt;/Speed&gt;&lt;/u:Stop&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteButtonPressedStateScriptPacketParser>
 						<IconId>215</IconId>
 					</DeviceProperties>
 				</Device>
@@ -109,8 +118,22 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 						<OffStateIconId>205</OffStateIconId>
 						<OnStateName>${general_on}</OnStateName>
 						<OffStateName>${general_off}</OffStateName>
-						<ReadSwitchStateRequest>{"Path":{"Script":"upnp/control/rendercontrol1","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetMute xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#GetMute\"\\x0ACONTENT-TYPE: text/xml; charset=\"utf-8\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":"PARSETEXT(VALUERESPONSE,\"&lt;CurrentMute&gt;\")"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest>{"Path":{"Script":"upnp/control/rendercontrol1","IsPlainText":true},"Content":{"Script":"\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetMute xmlns:u=\\\"urn:schemas-upnp-org:service:RenderingControl:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredMute&gt;\" + St + \"&lt;/DesiredMute&gt;&lt;/u:SetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetMute\"\r\nCONTENT-TYPE: text/xml; charset=\"utf-8\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#GetMute\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetMute xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;/u:GetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+VAR response := SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, headers);
+
+IF(PARSEJSON(response, "IsSuccess", 1) = 1)
+    VAR responseXml := PARSEJSON(response, "Content");
+    RETURN(PARSEXML(responseXml, "//CurrentMute"));
+ELSE
+    ADDERROR(PARSEJSON(response, "Content"));
+    RETURN(NaN);
+END</ReadSwitchStateScriptPacketParser>
+						<WriteSwitchStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetMute\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:SetMute xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredMute&gt;" + St +"&lt;/DesiredMute&gt;&lt;/u:SetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, headers);</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -148,8 +171,25 @@ SENDHTTPREQUEST("rendertransport1", "POST", body, headers);</WriteButtonPressedS
 						<Value7IconId>12</Value7IconId>
 						<Value8IconId>13</Value8IconId>
 						<Value9IconId>14</Value9IconId>
-						<ReadSwitchStateRequest>{"Path":{"Script":"upnp/control/rendertransport1","IsPlainText":true},"Content":{"Script":"&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetTransportSettings xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:GetTransportSettings&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;","IsPlainText":true},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#GetTransportSettings\"\r\nCONTENT-TYPE: text/xml; charset=\"utf-8\"","IsPlainText":true},"Method":"POST","Mode":2,"ParseScript":"VAR mode := PARSETEXT(VALUERESPONSE,\"&lt;PlayMode&gt;\",\"&lt;/PlayMode&gt;\");\r\n\r\nSWITCH(mode, \"NORMAL\", 0, \"REPEAT_ALL\", 1, \"REPEAT_TRACK\", 2, 0)"}</ReadSwitchStateRequest>
-						<WriteSwitchStateRequest>{"Path":{"Script":"upnp/control/rendertransport1","IsPlainText":true},"Content":{"Script":"VAR mode := SWITCH(Mu, 0, \"NORMAL\", 1, \"REPEAT_ALL\", 2, \"REPEAT_TRACK\", \"NORMAL\");\r\n\r\n\"&lt;?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?&gt;&lt;s:Envelope s:encodingStyle=\\\"http://schemas.xmlsoap.org/soap/encoding/\\\" xmlns:s=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"&gt;&lt;s:Body&gt;&lt;u:SetPlayMode xmlns:u=\\\"urn:schemas-upnp-org:service:AVTransport:1\\\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;NewPlayMode&gt;\" + mode + \"&lt;/NewPlayMode&gt;&lt;/u:SetPlayMode&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;\"","IsPlainText":false},"Headers":{"Script":"SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#SetPlayMode\"\r\nCONTENT-TYPE: text/xml; charset=\"utf-8\"","Method":"POST","Mode":2,"ParseScript":null}</WriteSwitchStateRequest>
+						<ReadSwitchStateScriptPacketParser>VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#GetTransportSettings\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:GetTransportSettings xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;/u:GetTransportSettings&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+VAR response := SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);
+
+IF(PARSEJSON(response, "IsSuccess", 1) = 1)
+    VAR responseXml := PARSEJSON(response, "Content");
+    VAR mode := PARSEXML(responseXml, "//PlayMode");
+    RETURN(SWITCH(mode, "NORMAL", 0, "REPEAT_ALL", 1, "REPEAT_TRACK", 2, 0));
+ELSE
+    ADDERROR(PARSEJSON(response, "Content"));
+    RETURN(NaN);
+END</ReadSwitchStateScriptPacketParser>
+						<WriteSwitchStateScriptPacketParser>VAR mode := SWITCH(Mu, 0, "NORMAL", 1, "REPEAT_ALL", 2, "REPEAT_TRACK", "NORMAL");
+
+VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#SetPlayMode\"$THHEADER$CONTENT-TYPE: text/xml; charset=\"utf-8\"";
+VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:SetPlayMode xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;NewPlayMode&gt;" + mode +"&lt;/NewPlayMode&gt;&lt;/u:SetPlayMode&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+
+SENDHTTPREQUEST("/upnp/control/rendertransport1", "POST", body, headers);</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>
