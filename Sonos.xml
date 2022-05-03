@@ -260,7 +260,6 @@ SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);</Wr
 VAR response := SENDHTTPREQUEST("xml/device_description.xml");
 VAR content := PARSEJSON(response, "Content");
 VAR playerUuid := PARSETEXT(response, "&lt;UDN&gt;uuid:", "&lt;/UDN&gt;");
-#VAR playerUuid := PARSEXML(content, "./root[1]/device[1]/UDN[1]");
 
 IF(ISNULL(playerUuid))
     ADDERROR("Failed to get player UUID");
@@ -271,16 +270,20 @@ END
 ######################
 # fetch playlists
 VAR headers := "SOAPACTION: \"urn:schemas-upnp-org:service:ContentDirectory:1#Browse\"";
-VAR body := "&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Browse xmlns:u=\"urn:schemas-upnp-org:service:ContentDirectory:1\"&gt;&lt;ObjectID&gt;SQ:&lt;/ObjectID&gt;&lt;BrowseFlag&gt;BrowseDirectChildren&lt;/BrowseFlag&gt;&lt;Filter&gt;&lt;/Filter&gt;&lt;StartingIndex&gt;0&lt;/StartingIndex&gt;&lt;RequestedCount&gt;100&lt;/RequestedCount&gt;&lt;SortCriteria&gt;&lt;/SortCriteria&gt;&lt;/u:Browse&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+VAR body := "&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:Browse xmlns:u=\"urn:schemas-upnp-org:service:ContentDirectory:1\"&gt;&lt;ObjectID&gt;SQ:&lt;/ObjectID&gt;&lt;BrowseFlag&gt;BrowseDirectChildren&lt;/BrowseFlag&gt;&lt;Filter&gt;&lt;/Filter&gt;&lt;StartingIndex&gt;0&lt;/StartingIndex&gt;&lt;RequestedCount&gt;500&lt;/RequestedCount&gt;&lt;SortCriteria&gt;&lt;/SortCriteria&gt;&lt;/u:Browse&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
 response := SENDHTTPREQUEST("MediaServer/ContentDirectory/Control", "POST", body, headers);
 content := PARSEJSON(response, "Content");
-VAR soapXml := UNESCAPEXML(PARSETEXT(content, "&lt;Result&gt;", "&lt;/Result&gt;"));
-VAR playlistId := PARSEXML(soapXml, "//DIDL-Lite:container[dc:title='" + playlist_name + "']/@id");
-VAR playlistUri := PARSEXML(soapXml, "//DIDL-Lite:container[dc:title='" + playlist_name + "']/DIDL-Lite:res");
+VAR playlists := PARSETEXT(content, "&lt;Result&gt;", "&lt;/Result&gt;");
+playlists := REPLACE(playlists, "&amp;apos;", "'");
+playlists := REPLACE(playlists, "&amp;amp;", "&amp;");
+playlists := REPLACE(playlists, "&amp;quot;", "\"");
+playlists := REPLACE(playlists, "&amp;gt;", "&gt;");
+playlists := REPLACE(playlists, "&amp;lt;", "&lt;");
+VAR playlistUri := PARSEXML(playlists, "//DIDL-Lite:container[dc:title='" + playlist_name + "']/DIDL-Lite:res");
 ######################
 
-IF(ISNULL(playlistId) OR ISNULL(playlistUri))
+IF(ISNULL(playlistUri))
     ADDERROR("Unable to find playlist with name '" + playlist_name + "'");
     RETURN(-2);
 END
@@ -296,7 +299,7 @@ SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);
 ######################
 # add playlist to queue
 headers := "SOAPACTION: \"urn:schemas-upnp-org:service:AVTransport:1#AddURIToQueue\"";
-body := "&lt;s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"&gt;&lt;s:Body&gt;&lt;u:AddURIToQueue xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;EnqueuedURI&gt;" + playlistUri + "&lt;/EnqueuedURI&gt;&lt;EnqueuedURIMetaData&gt;&lt;/EnqueuedURIMetaData&gt;&lt;DesiredFirstTrackNumberEnqueued&gt;0&lt;/DesiredFirstTrackNumberEnqueued&gt;&lt;EnqueueAsNext&gt;1&lt;/EnqueueAsNext&gt;&lt;/u:AddURIToQueue&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
+body := "&lt;s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"&gt;&lt;s:Body&gt;&lt;u:AddURIToQueue xmlns:u=\"urn:schemas-upnp-org:service:AVTransport:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;EnqueuedURI&gt;" + playlistUri + "&lt;/EnqueuedURI&gt;&lt;EnqueuedURIMetaData&gt;&lt;/EnqueuedURIMetaData&gt;&lt;DesiredFirstTrackNumberEnqueued&gt;0&lt;/DesiredFirstTrackNumberEnqueued&gt;&lt;EnqueueAsNext&gt;0&lt;/EnqueueAsNext&gt;&lt;/u:AddURIToQueue&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
 SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, headers);
 ######################
