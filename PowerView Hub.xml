@@ -44,11 +44,10 @@ ELSE
     ADDERROR(PARSEJSON(response, "Content"));
     RETURN(NaN);
 END</ReadBlindsLevelScriptPacketParser>
-            <WriteBlindsLevelScriptPacketParser>VAR headers := "Content-Type:application/json";
-VAR pos := ROUND((1 - Bl) * 65535);
+            <WriteBlindsLevelScriptPacketParser>VAR pos := ROUND((1 - Bl) * 65535);
 VAR contentJson := "{\"shade\": { \"positions\": { \"posKind1\": 1, \"position1\":" + pos + "}}}";
 
-SENDHTTPREQUEST("/api/shades/" + SlideDeviceId, "PUT", contentJson, headers);
+SENDHTTPREQUEST("/api/shades/" + SlideDeviceId, "PUT", contentJson, "Content-Type:application/json");
 </WriteBlindsLevelScriptPacketParser>
 					</DeviceProperties>
 				</Device>
