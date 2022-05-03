@@ -33,7 +33,7 @@
 				<Port>$[port]</Port>
 				<StayConnected>True</StayConnected>
 				<CustomVariables>[{"Name":"report2","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
-				<ReadScriptPacketParser>SENDDATA(TOBYTES("report 2"));</ReadScriptPacketParser>
+				<ReadScriptPacketParser>SENDDATA(TOBYTEARRAY("report 2"));</ReadScriptPacketParser>
 				<ListenerScriptPacketParser>VAR jsonString := TOSTRING(RECEIVEDBYTES);
 VAR id := PARSEJSON(jsonString, "$.ID", 1);
 
@@ -53,7 +53,7 @@ END</ListenerScriptPacketParser>
 						<OffStateName>${general_disabled}</OffStateName>
 						<ListenerScriptPacketParser>St := PARSEJSON(report2, "$.['Enable user']", 1)</ListenerScriptPacketParser>
 						<WriteSwitchStateScriptPacketParser>VAR command := "ena " + St;
-SENDDATA(TOBYTES(command));</WriteSwitchStateScriptPacketParser>
+SENDDATA(TOBYTEARRAY(command));</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -135,7 +135,7 @@ Mu := SWITCH(State, 0, 1, 1, 2, 2, 3, 3, 5, 4, 8, 5, 9, 1)</ListenerScriptPacket
 						<IsReadOnly>False</IsReadOnly>
 						<ListenerScriptPacketParser>Va := PARSEJSON(report2, "$.['Curr user']", 1) / 1000.0</ListenerScriptPacketParser>
 						<WriteStateScriptPacketParser>VAR command := "curr " + Va*1000;
-SENDDATA(TOBYTES(command));</WriteStateScriptPacketParser>
+SENDDATA(TOBYTEARRAY(command));</WriteStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 			</Devices>

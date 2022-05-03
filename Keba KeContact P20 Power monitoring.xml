@@ -33,7 +33,7 @@
 				<Port>$[port]</Port>
 				<StayConnected>True</StayConnected>
 				<CustomVariables>[{"Name":"report3","ValueTypeId":2,"NumericValue":0.0,"StringValue":"0"}]</CustomVariables>
-				<ReadScriptPacketParser>SENDDATA(TOBYTES("report 3"));</ReadScriptPacketParser>
+				<ReadScriptPacketParser>SENDDATA(TOBYTEARRAY("report 3"));</ReadScriptPacketParser>
 				<ListenerScriptPacketParser>VAR jsonString := TOSTRING(RECEIVEDBYTES);
 VAR id := PARSEJSON(jsonString, "$.ID", 1);
 
