@@ -124,7 +124,7 @@ ELSE
 END</ReadSwitchStateScriptPacketParser>
 						<WriteSwitchStateScriptPacketParser>VAR body := "&lt;?xml version=\"1.0\" encoding=\"utf-8\"?&gt;&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;&lt;s:Body&gt;&lt;u:SetMute xmlns:u=\"urn:schemas-upnp-org:service:RenderingControl:1\"&gt;&lt;InstanceID&gt;0&lt;/InstanceID&gt;&lt;Channel&gt;Master&lt;/Channel&gt;&lt;DesiredMute&gt;" + St +"&lt;/DesiredMute&gt;&lt;/u:SetMute&gt;&lt;/s:Body&gt;&lt;/s:Envelope&gt;";
 
-SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetMute\", "CONTENT-TYPE: text/xml; charset=\"utf-8\"");</WriteSwitchStateScriptPacketParser>
+SENDHTTPREQUEST("/upnp/control/rendercontrol1", "POST", body, "SOAPACTION: \"urn:schemas-upnp-org:service:RenderingControl:1#SetMute\"", "CONTENT-TYPE: text/xml; charset=\"utf-8\"");</WriteSwitchStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
