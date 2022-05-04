@@ -31,7 +31,7 @@
 				<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
 				<IpAddress>$[IpAddress]</IpAddress>
 				<Port>$[port]</Port>
-				<StayConnected>True</StayConnected>
+				<StayConnected>False</StayConnected>
 				<CustomVariables>[{"Name":"report3","ValueTypeId":2,"NumericValue":0.0,"StringValue":""}]</CustomVariables>
 				<ReadScriptPacketParser>SENDDATA(TOBYTEARRAY("report 3"));</ReadScriptPacketParser>
 				<ListenerScriptPacketParser>VAR jsonString := TOSTRING(RECEIVEDBYTES);

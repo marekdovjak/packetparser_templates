@@ -34,7 +34,7 @@
 					<Model>PacketParserSlide</Model>
 					<DeviceProperties>
 						<InternalPollInterval>$[internalPollInterval]</InternalPollInterval>
-            <ReadBlindsLevelScriptPacketParser>VAR response := SENDHTTPREQUEST("api/shades/" + SlideDeviceId);
+						<ReadBlindsLevelScriptPacketParser>VAR response := SENDHTTPREQUEST("api/shades/" + SlideDeviceId);
 
 IF(PARSEJSON(response, "IsSuccess"))
     VAR responseJson := PARSEJSON(response, "Content");
@@ -44,7 +44,7 @@ ELSE
     ADDERROR(PARSEJSON(response, "Content"));
     RETURN(NaN);
 END</ReadBlindsLevelScriptPacketParser>
-            <WriteBlindsLevelScriptPacketParser>VAR pos := ROUND((1 - Bl) * 65535);
+						<WriteBlindsLevelScriptPacketParser>VAR pos := ROUND((1 - Bl) * 65535);
 VAR contentJson := "{\"shade\": { \"positions\": { \"posKind1\": 1, \"position1\":" + pos + "}}}";
 
 SENDHTTPREQUEST("/api/shades/" + SlideDeviceId, "PUT", contentJson, "Content-Type:application/json");
