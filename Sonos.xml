@@ -22,7 +22,8 @@
 				<Port>1400</Port>
 				<ConnectionType>http</ConnectionType>
 				<InternalPollInterval>15000</InternalPollInterval>
-				<ReadRequest></ReadRequest>
+				<CustomVariables>[{"Name":"deviceDescription","ValueTypeId":1,"NumericValue":0.0,"StringValue":null}]</CustomVariables>
+        <ServiceAttributesScriptsPacketParser>[{"AttributeDefinition":{"Name":"Model name","Section":null},"ReadFormula":"deviceDescription := PARSEJSON(SENDHTTPREQUEST(\"/xml/device_description.xml\"), \"Content\");\r\n\r\nPARSEXML(deviceDescription, \"//root:modelName[1]\");"},{"AttributeDefinition":{"Name":"Model url","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:modelURL[1]\");"},{"AttributeDefinition":{"Name":"SW version","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:softwareVersion[1]\");"},{"AttributeDefinition":{"Name":"SW generation","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:swGen[1]\");"},{"AttributeDefinition":{"Name":"HW revision","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:hardwareVersion[1]\");"},{"AttributeDefinition":{"Name":"Serial number","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:serialNum[1]\");"},{"AttributeDefinition":{"Name":"Mac address","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:MACAddress[1]\");"},{"AttributeDefinition":{"Name":"UDN","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:UDN[1]\");"},{"AttributeDefinition":{"Name":"API version","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:apiVersion[1]\");"},{"AttributeDefinition":{"Name":"Min API version","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:minApiVersion[1]\");"},{"AttributeDefinition":{"Name":"Room name","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:roomName[1]\");"},{"AttributeDefinition":{"Name":"Display name","Section":null},"ReadFormula":"PARSEXML(deviceDescription, \"//root:displayName[1]\");"}]</ServiceAttributesScriptsPacketParser>
 			</DeviceProperties>
 			<Devices>
 				<Device>
@@ -281,16 +282,11 @@ VAR body := "&lt;s:Envelope s:encodingStyle=\"http://schemas.xmlsoap.org/soap/en
 
 response := SENDHTTPREQUEST("MediaServer/ContentDirectory/Control", "POST", body, header);
 content := PARSEJSON(response, "Content");
-VAR playlists := PARSETEXT(content, "&lt;Result&gt;", "&lt;/Result&gt;");
-playlists := REPLACE(playlists, "&amp;apos;", "'");
-playlists := REPLACE(playlists, "&amp;amp;", "&amp;");
-playlists := REPLACE(playlists, "&amp;quot;", "\"");
-playlists := REPLACE(playlists, "&amp;gt;", "&gt;");
-playlists := REPLACE(playlists, "&amp;lt;", "&lt;");
-VAR playlistUri := PARSEXML(playlists, "//DIDL-Lite:container[dc:title='" + playlist_name + "']/DIDL-Lite:res");
+VAR playlistsXml := DECODE(PARSETEXT(content, "&lt;Result&gt;", "&lt;/Result&gt;"), "xml");
+VAR playlistUri := PARSEXML(playlistsXml, "//DIDL-Lite:container[dc:title='" + playlist_name + "']/DIDL-Lite:res");
 ######################
 
-IF(ISNULL(playlistUri))
+IF(ISNULL(playlistUri) OR LENGTH(playlistUri) = 0)
     ADDERROR("Unable to find playlist with name '" + playlist_name + "'. Only Sonos playlist are supported.");
     RETURN(-3);
 END
