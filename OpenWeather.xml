@@ -488,7 +488,7 @@ SWITCH(weather, "Clear", 0, "Clouds", 1, "Rain", 2, "Drizzle", 3, "Thunderstorm"
 END
 
 VAR weather := PARSEJSON(responseJson, "daily[0].weather[0].main");
-SWITCH(weather, "Rain", PARSEJSON(responseJson, "daily[0].rain.1h"), "Snow",  PARSEJSON(responseJson, "daily[0].snow.1h") ,0);
+SWITCH(weather, "Rain", PARSEJSON(responseJson, "daily[0].rain"), "Snow",  PARSEJSON(responseJson, "daily[0].snow.1h") ,0);
 </ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
