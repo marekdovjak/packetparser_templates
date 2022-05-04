@@ -256,6 +256,13 @@ SENDHTTPREQUEST("MediaRenderer/AVTransport/Control", "POST", body, header);</Wri
 					<ServiceAttributesScriptsPacketParser></ServiceAttributesScriptsPacketParser>
 					<ServiceActionsScriptsPacketParser></ServiceActionsScriptsPacketParser>
 					<WriteButtonPressedStateScriptPacketParser>######################
+# check playlist name is not empty
+IF(ISNULL(playlist_name) OR LENGTH(playlist_name) = 0)
+   ADDERROR("Please set playlist name in device variables");
+   RETURN(-1);
+END
+
+######################
 # get player uuid
 VAR response := SENDHTTPREQUEST("xml/device_description.xml");
 VAR content := PARSEJSON(response, "Content");
@@ -263,7 +270,7 @@ VAR playerUuid := PARSETEXT(response, "&lt;UDN&gt;uuid:", "&lt;/UDN&gt;");
 
 IF(ISNULL(playerUuid))
     ADDERROR("Failed to get player UUID");
-    RETURN(-1);
+    RETURN(-2);
 END
 ######################
 
@@ -284,8 +291,8 @@ VAR playlistUri := PARSEXML(playlists, "//DIDL-Lite:container[dc:title='" + play
 ######################
 
 IF(ISNULL(playlistUri))
-    ADDERROR("Unable to find playlist with name '" + playlist_name + "'");
-    RETURN(-2);
+    ADDERROR("Unable to find playlist with name '" + playlist_name + "'. Only Sonos playlist are supported.");
+    RETURN(-3);
 END
 
 ######################

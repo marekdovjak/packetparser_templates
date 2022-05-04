@@ -39,9 +39,10 @@
 				<ServiceAttributesScriptsPacketParser>[{"AttributeDefinition":{"Name":"Color mode","Section":null},"ReadFormula":"VAR json := \"{\\\"id\\\":981, \\\"method\\\":\\\"get_prop\\\", \\\"params\\\":[\\\"color_mode\\\", \\\"ct\\\"]}\";\r\nSENDDATA(json);"},{"AttributeDefinition":{"Name":"Color temperature","Section":null},"ReadFormula":null}]</ServiceAttributesScriptsPacketParser>
 				<ListenerScriptPacketParser>VAR jsonResponse := TOSTRING(RECEIVEDBYTES);
 VAR id := PARSEJSON(jsonResponse, "id", 1);
-VAR error := PARSEJSON(jsonResponse, "error.message", 1);
 
 IF(id = 981)
+   VAR error := PARSEJSON(jsonResponse, "error.message", 1);
+   
    IF(!ISNULL(error))
       COMPLETESERVICEATTRIBUTE("Color mode", "", "error");
       COMPLETESERVICEATTRIBUTE("Color temperature", "", "error");
@@ -72,49 +73,68 @@ END</ListenerScriptPacketParser>
 					<DeviceProperties>
 						<ReadScriptPacketParser></ReadScriptPacketParser>
 						<InternalPollInterval>10000</InternalPollInterval>
-						<CustomVariables />
+						<CustomVariables>[{"Name":"receiveError","ValueTypeId":2,"NumericValue":0.0,"StringValue":""},{"Name":"notificationError","ValueTypeId":2,"NumericValue":0.0,"StringValue":""},{"Name":"sendError","ValueTypeId":2,"NumericValue":0.0,"StringValue":""}]</CustomVariables>
 						<ListenerScriptPacketParser>VAR jsonResponse := TOSTRING(RECEIVEDBYTES);
 VAR method := PARSEJSON(jsonResponse, "method", 1);
 VAR id := PARSEJSON(jsonResponse, "id", 1);
-VAR error := PARSEJSON(jsonResponse, "error.message", 1);
-
-IF(!ISNULL(error))
-   ADDERROR(error);
-END
 
 IF(id = 951)
-   VAR brightness := PARSEJSON(jsonResponse, "result[0]", 1);
-   VAR onOff := PARSEJSON(jsonResponse, "result[1]", 1);
+   receiveError := PARSEJSON(jsonResponse, "error.message", 1);
    
-   IF(!ISNULL(brightness))
-      Le := TODOUBLE(brightness) / 100.0;
-   END
+   IF(LENGTH(receiveError) = 0)
+      VAR brightness := PARSEJSON(jsonResponse, "result[0]", 1);
+      VAR onOff := PARSEJSON(jsonResponse, "result[1]", 1);
    
-   IF(onOff = "on")
-      St := 1;
-   ELSEIF(onOff = "off")
-      Le := 0;
-      St := 0;
+      IF(!ISNULL(brightness))
+         Le := TODOUBLE(brightness) / 100.0;
+      END
+   
+      IF(onOff = "on")
+         St := 1;
+      ELSEIF(onOff = "off")
+         Le := 0;
+         St := 0;
+      END
    END
+END
+
+IF(id &gt; 951 AND id &lt; 955)
+   sendError := PARSEJSON(jsonResponse, "error.message", 1);
 END
 
 IF(method = "props")
-   VAR brightness := PARSEJSON(jsonResponse, "params.bright", 1);
-   VAR onOff := PARSEJSON(jsonResponse, "params.power", 1);
+   notificationError := PARSEJSON(jsonResponse, "error.message", 1);
    
-   IF(!ISNULL(brightness))
-     Le := brightness / 100.0;
-   END
+   IF(LENGTH(notificationError) = 0)
+      VAR brightness := PARSEJSON(jsonResponse, "params.bright", 1);
+      VAR onOff := PARSEJSON(jsonResponse, "params.power", 1);
    
-   IF(onOff = "on")
-      St := 1;
-      IF(ISNULL(brightness))
-      SENDDATA("{\"id\":951, \"method\":\"get_prop\", \"params\":[\"bright\", \"power\"]}");
+      IF(!ISNULL(brightness))
+         Le := brightness / 100.0;
       END
-   ELSEIF(onOff = "off")
-      Le := 0;
-      St := 0;
+   
+      IF(onOff = "on")
+         St := 1;
+         IF(ISNULL(brightness))
+            SENDDATA("{\"id\":951, \"method\":\"get_prop\", \"params\":[\"bright\", \"power\"]}");
+         END
+      ELSEIF(onOff = "off")
+         Le := 0;
+         St := 0;
+      END
    END
+END
+
+IF(LENGTH(receiveError) &gt; 0)
+   ADDERROR("Read error: " + receiveError);
+END
+
+IF(LENGTH(sendError) &gt; 0)
+   ADDERROR("Write error: " + sendError);
+END
+
+IF(LENGTH(notificationError) &gt; 0)
+   ADDERROR(notificationError);
 END</ListenerScriptPacketParser>
 						<ReadLevelScriptPacketParser>VAR json := "{\"id\":951, \"method\":\"get_prop\", \"params\":[\"bright\", \"power\"]}";
 SENDDATA(json);</ReadLevelScriptPacketParser>
