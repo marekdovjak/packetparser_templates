@@ -113,7 +113,13 @@ END</ReadScriptPacketParser>
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"current.visibility"))</ReadStateScriptPacketParser>
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+    RETURN(NaN);
+END
+
+VAR visibility := PARSEJSON(responseJson,"current.visibility", 1);
+
+IF(visibility, visibility, 10000);</ReadStateScriptPacketParser>
 					</DeviceProperties>
 				</Device>
 				<Device>
@@ -259,7 +265,13 @@ SWITCH(weather, "Rain", PARSEJSON(responseJson, "current.rain.1h"), "Snow",  PAR
 					<DeviceProperties>
 						<IsReadOnly>True</IsReadOnly>
 						<InternalPollInterval>300000</InternalPollInterval>
-						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error", NaN, PARSEJSON(responseJson,"hourly[0].visibility"))</ReadStateScriptPacketParser>						
+						<ReadStateScriptPacketParser>IF(ISNULL(responseJson) | responseJson = "error")
+    RETURN(NaN);
+END
+
+VAR visibility := PARSEJSON(responseJson,"hourly[0].visibility", 1);
+
+IF(visibility, visibility, 10000);</ReadStateScriptPacketParser>				
 					</DeviceProperties>
 				</Device>
 				<Device>
