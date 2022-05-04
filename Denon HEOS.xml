@@ -25,7 +25,7 @@
 				<InternalPollInterval>15000</InternalPollInterval>
 				<IpAddress>$[ipAddress]</IpAddress>
 				<Port>1255</Port>
-				<StayConnected>True</StayConnected>
+				<StayConnected>False</StayConnected>
 				<CustomVariables>[{"Name":"PlayerId","ValueTypeId":1,"NumericValue":12345.0,"StringValue":null}]</CustomVariables>
 				<MessageFramingDefinition>{"Framing":1,"Configuration":"{\"SendMessageBeginDelimiter\":null,\"SendMessageEndDelimiter\":\"DQo=\",\"ReceiveMessageBeginDelimiter\":null,\"ReceiveMessageEndDelimiter\":\"DQo=\"}"}</MessageFramingDefinition>
 			</DeviceProperties>
